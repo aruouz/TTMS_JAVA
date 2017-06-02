@@ -20,14 +20,14 @@ public class StudioDAO implements iStudioDAO {
 	@Override
 	public int insert(Studio stu) {
 		try {
-			String sql = "insert into studio(studio_name, studio_row_count, studio_col_count, studio_introduction )"
+			String sql = "insert into studio(studio_name, studio_row_count, studio_col_count, studio_introduction ,studio_flag)"
 					+ " values('"
 					+ stu.getName()
 					+ "', "
 					+ stu.getRowCount()
 					+ ", " + stu.getColCount() 
 					+ ", '" + stu.getIntroduction()
-					+ "' )";
+					+ "' ,"+stu.getStudio_flag()+")";
 			DBUtil db = new DBUtil();
 			db.openConnection();
 			ResultSet rst = db.getInsertObjectIDs(sql);
@@ -53,7 +53,7 @@ public class StudioDAO implements iStudioDAO {
 					+ stu.getName() + "', " + " studio_row_count = "
 					+ stu.getRowCount() + ", " + " studio_col_count = "
 					+ stu.getColCount() + ", " + " studio_introduction = '"
-					+ stu.getIntroduction() + "' ";
+					+ stu.getIntroduction() + "' ,studio_flag = "+stu.getStudio_flag();
 
 			sql += " where studio_id = " + stu.getID();
 			DBUtil db = new DBUtil();
@@ -88,11 +88,13 @@ public class StudioDAO implements iStudioDAO {
 		List<Studio> stuList = null;
 		stuList=new LinkedList<Studio>();
 		try {
-			String sql = "select studio_id, studio_name, studio_row_count, studio_col_count, studio_introduction from studio ";
+			String sql = "select studio_id, studio_name, studio_row_count, studio_col_count, studio_introduction,studio_flag from studio ";
+			
 			condt.trim();
+			
 			if(!condt.isEmpty())
-				sql+= " where " + condt; 
-			DBUtil db = new DBUtil();
+				sql=sql+ condt; 
+			DBUtil db =new DBUtil();
 			if(!db.openConnection()){
 				System.out.print("fail to connect database");
 				return null;
@@ -106,7 +108,9 @@ public class StudioDAO implements iStudioDAO {
 					stu.setRowCount(rst.getInt("studio_row_count"));
 					stu.setColCount(rst.getInt("studio_col_count"));
 					stu.setIntroduction(rst.getString("studio_introduction"));
+					stu.setStudio_flag(rst.getInt("studio_flag"));
 					stuList.add(stu);
+					
 				}
 			}
 			db.close(rst);
@@ -120,4 +124,7 @@ public class StudioDAO implements iStudioDAO {
 		
 		return stuList;
 	}
+	
+	
 }
+

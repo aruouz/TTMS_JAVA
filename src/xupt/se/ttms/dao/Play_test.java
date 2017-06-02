@@ -17,12 +17,11 @@ public class Play_test {
 	ply1.setPlay_name("aruouz  play");
 	ply1.setPlay_status(1);
 	ply1.setPlay_ticket_price(20);
+	ply1.setPlay_image("d:/1.jpg");
 	test1.add(ply1);
 	System.out.println("创建成功");
 	
-	ply1.setPlay_id(29);
-	ply1.setPlay_introduction("这是一个简介");
-	test1.modify(ply1);
 	}
+	
 
 }

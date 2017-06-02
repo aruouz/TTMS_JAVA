@@ -26,9 +26,9 @@ import xupt.se.ttms.view.tmpl.MainUITmpl;
 import xupt.se.ttms.view.tmpl.PopUITmpl;
 
 public class PlayAddUI extends PopUITmpl implements ActionListener {
-	private JButton btnCancel, btnSave; 	//å–æ¶ˆï¼Œä¿å­˜æŒ‰éˆ•
+	private JButton btnCancel, btnSave; 	//È¡Ïû£¬±£´æ°´âo
 
-	protected boolean rst=false; 				//æ“ä½œç»“æœ
+	protected boolean rst=false; 				//²Ù×÷½á¹û
 	private JLabel lblName, lbltype, lbllang,lblintroduction,lbllength,lblticketPrice,lblstatus;
 	protected JTextField txtName, txttype, txtlang,txtlength,txtticketPrice,txtstatus;
 
@@ -40,16 +40,16 @@ public class PlayAddUI extends PopUITmpl implements ActionListener {
 
 	@Override
 	protected void initContent(){
-		this.setTitle("æ·»åŠ å‰§ç›®ä¿¡æ¯");
+		this.setTitle("Ìí¼Ó¾çÄ¿ĞÅÏ¢");
 
-		lblName = new JLabel("å‰§ç›®åç§°ï¼š");
+		lblName = new JLabel("¾çÄ¿Ãû³Æ£º");
 		lblName.setBounds(260, 30, 80, 30);
 		contPan.add(lblName);
 		txtName = new JTextField();
 		txtName.setBounds(350, 30, 200, 30);
 		contPan.add(txtName);
 
-		lbltype = new JLabel("ç±»å‹ï¼š");  
+		lbltype = new JLabel("ÀàĞÍ£º");  
         String str1[] = {};  
         JComboBox jcbtype = new JComboBox(str1);  
         contPan.add(lbltype);  
@@ -60,7 +60,7 @@ public class PlayAddUI extends PopUITmpl implements ActionListener {
         this.setVisible(true);  
 	    
 
-        lbllang = new JLabel("è¯­è¨€ï¼š");  
+        lbllang = new JLabel("ÓïÑÔ£º");  
         String str2[] = {};  
         JComboBox jcblan = new JComboBox(str2);  
         contPan.add(lbllang);  
@@ -70,7 +70,7 @@ public class PlayAddUI extends PopUITmpl implements ActionListener {
         this.add(contPan);
         this.setVisible(true); 
 	
-		lblintroduction = new JLabel("å‰§ç›®ç®€ä»‹ï¼š");
+		lblintroduction = new JLabel("¾çÄ¿¼ò½é£º");
 		lblintroduction.setBounds(260, 180, 90, 30);
 		contPan.add(lblintroduction);
 		txtintroduction = new JTextArea();
@@ -78,22 +78,22 @@ public class PlayAddUI extends PopUITmpl implements ActionListener {
 		contPan.add(txtintroduction);
 		txtintroduction.grabFocus();
 		
-		lbllength = new JLabel("æ—¶é•¿ï¼š");
+		lbllength = new JLabel("Ê±³¤£º");
 		lbllength.setBounds(260, 300, 90, 30);
 		contPan.add(lbllength);
 		txtlength = new JTextField();
 		txtlength.setBounds(350, 300, 120, 30);
 		contPan.add(txtlength);
 		
-		lblticketPrice = new JLabel("ç¥¨ä»·ï¼š");
+		lblticketPrice = new JLabel("Æ±¼Û£º");
 		lblticketPrice.setBounds(260, 350, 90, 30);
 		contPan.add(lblticketPrice);
 		txtticketPrice = new JTextField();
 		txtticketPrice.setBounds(350, 350, 120, 30);
 		contPan.add(txtticketPrice);
 		
-		lblstatus = new JLabel("çŠ¶æ€ï¼š");  
-        String str3[] = {"æœªå®‰æ’æ¼”å‡º","å·²å®‰æ’æ¼”å‡º","ä¸‹çº¿"};  
+		lblstatus = new JLabel("×´Ì¬£º");  
+        String str3[] = {};  
         JComboBox jcbsta = new JComboBox(str3);  
         contPan.add(lblstatus);  
         contPan.add(jcbsta);    
@@ -102,12 +102,12 @@ public class PlayAddUI extends PopUITmpl implements ActionListener {
         this.add(contPan);
         this.setVisible(true);
 
-		btnSave = new JButton("ä¿å­˜");
+		btnSave = new JButton("±£´æ");
 		btnSave.addActionListener(this);
 		btnSave.setBounds(300, 450, 60, 30);
 		contPan.add(btnSave);
 
-		btnCancel = new JButton("å–æ¶ˆ");
+		btnCancel = new JButton("È¡Ïû");
 		btnCancel.addActionListener(this);
 		btnCancel.setBounds(400, 450, 60, 30);
 		contPan.add(btnCancel);
@@ -132,7 +132,7 @@ public class PlayAddUI extends PopUITmpl implements ActionListener {
 			getParent().setVisible(true);
 
 		} else if (e.getSource() == btnSave) {
-			btnSaveClicked();		//ä»¥å‰æœªè°ƒç”¨ï¼Œæ–°æ·»åŠ çš„è°ƒç”¨è¯­å¥
+			btnSaveClicked();		//ÒÔÇ°Î´µ÷ÓÃ£¬ĞÂÌí¼ÓµÄµ÷ÓÃÓï¾ä
 		}
 
 	}
@@ -155,7 +155,7 @@ public class PlayAddUI extends PopUITmpl implements ActionListener {
 			rst=true;
 			getParent().setVisible(true);
 		} else {
-			JOptionPane.showMessageDialog(null, "æ•°æ®ä¸å®Œæ•´");
+			JOptionPane.showMessageDialog(null, "Êı¾İ²»ÍêÕû");
 		}		
 	}
 }

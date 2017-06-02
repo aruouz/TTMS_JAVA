@@ -6,7 +6,8 @@ public class Studio {
 	private String name="" ;
 	private int rowCount=0;
 	private int colCount=0;
-	private String introduction=""; //���
+	private String introduction=""; 
+	private int studio_flag=0;//���
 	
 	public void setID(int ID){
 		this.id=ID;
@@ -47,4 +48,11 @@ public class Studio {
 		return introduction;
 	}	
 	
+	public int getStudio_flag(){
+		return studio_flag;
+	}
+	
+	public void setStudio_flag(int studio_flag){
+		this.studio_flag = studio_flag;
+	}
 }

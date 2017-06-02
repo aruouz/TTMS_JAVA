@@ -13,4 +13,16 @@ public class DAOFactory {
 	public static iUserDAO creatUserDAO(){
 		return new UserDAO();
 	}
+	
+	public static iScheduleDAO createScheduleDAO(){
+		return new ScheduleDAO();
+	}
+	
+	public static iSeatDAO createSeatDAO(){
+		return new SeatDAO();
+	}
+	
+	public static iTicketDAO createTicketDAO(){
+		return new TicketDAO();
+	}
 }

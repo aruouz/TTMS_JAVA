@@ -1,6 +1,10 @@
 package xupt.se.ttms.model;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 
+import xupt.se.util.SaveIMage;
 
 public class Play {
 
@@ -12,6 +16,7 @@ public class Play {
 	private int play_length;
 	private float play_ticket_price;
 	private int play_status;
+	private String play_image;
 	
 	public int getPlay_id(){
 		return play_id;
@@ -77,6 +82,15 @@ public class Play {
 	public void setPlay_status(int play_status){
 		this.play_status = play_status;
 	}
+
+	public FileInputStream getPlay_image() throws IOException{
+		return SaveIMage.readImage(play_image);
+		
+	}
+	public void setPlay_image(String play_image){
+		this.play_image = play_image;
+	}
+	
 
 
 }

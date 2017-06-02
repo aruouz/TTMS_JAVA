@@ -1,12 +1,14 @@
 package xupt.se.ttms.dao;
 
 import java.util.List;
+import java.io.InputStream;
 import java.sql.ResultSet;
 import java.util.LinkedList;
 
 import xupt.se.ttms.idao.iPlayDAO;
 import xupt.se.ttms.model.Play;
 import xupt.se.util.DBUtil;
+import xupt.se.util.SaveIMage;
 
 
 public class PlayDAO implements iPlayDAO{
@@ -20,7 +22,8 @@ public class PlayDAO implements iPlayDAO{
 					+ply.getPlay_introduction()+"', "
 					+ply.getPlay_length()+","
 					+ply.getPlay_ticket_price()+","
-					+ply.getPlay_status()+");";
+					+ply.getPlay_status()+","
+					+ply.getPlay_image()+")";
 			DBUtil db = new DBUtil();
 			db.openConnection();
 			ResultSet rst = db.getInsertObjectIDs(sql);
@@ -48,7 +51,7 @@ public class PlayDAO implements iPlayDAO{
 						+"',play_introduction='"+ply.getPlay_introduction()
 						+"',play_length="+ply.getPlay_length()
 						+",play_ticket_Price="+ply.getPlay_ticket_price()
-						+",play_status="+ply.getPlay_status()+" where play_id ="+ply.getPlay_id()+";";
+						+",play_status="+ply.getPlay_status()+",play_image="+ply.getPlay_image()+ ",where play_id ="+ply.getPlay_id();
 			
 			DBUtil db = new DBUtil();
 			db.openConnection();
@@ -118,4 +121,26 @@ public class PlayDAO implements iPlayDAO{
 		
 		return plyList;
 	}
+	
+	public String read(Play ply){
+    	String targetPath ="D:/image/1.png";
+    	try{
+			String sql ="SELECT play_image FROM play WHERE play_id="+ply.getPlay_id();
+			DBUtil db = new  DBUtil();
+			ResultSet rst = db.execQuery(sql);
+			while (rst.next()) {
+				              InputStream in = rst.getBinaryStream("play_image");
+				              SaveIMage.readBin2Image(in, targetPath);
+				           }    
+			db.close(rst);
+			 db.close();
+    	}catch(Exception e){
+			e.printStackTrace();
+		}
+		finally{
+			
+		}
+    	return targetPath;
+    }
+
 }

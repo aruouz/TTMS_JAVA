@@ -22,7 +22,7 @@ public class StudioSrv {
 		return stuDAO.delete(ID); 		
 	}
 	
-	public List<Studio> Fetch_name(String condt){
+	public static List<Studio> Fetch_name(String condt){
 		return stuDAO.select(" WHERE studio_name = "+"'"+condt+"'");		
 	}
 	
@@ -72,16 +72,6 @@ public class StudioSrv {
 		else{
 			return -1;
 		}
-	}
-	
-	public String Fetch_all_name(){
-		String rtn = "";
-		List<Studio> list = FetchAll();
-		for(int i =0; i<= list.size();i++){
-			Studio stu =new Studio();
-			return stu.getName();
-		}
-		return rtn ;
 	}
 	
 

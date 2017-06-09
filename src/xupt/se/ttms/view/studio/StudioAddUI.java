@@ -1,6 +1,7 @@
 
 package xupt.se.ttms.view.studio;
 
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -61,21 +62,17 @@ public class StudioAddUI extends PopUITmpl implements ActionListener {
 
 		
 		btnSave = new JButton("保存");
+		btnSave.setBackground(new Color(255,246,143));
 		btnSave.addActionListener(this);
 		btnSave.setBounds(60, 280, 60, 30);
 		contPan.add(btnSave);
 
 		btnCancel = new JButton("取消");
+		btnCancel.setBackground(new Color(255,246,143));
 		btnCancel.addActionListener(this);
 		btnCancel.setBounds(180, 280, 60, 30);
 		contPan.add(btnCancel);
 
-/*		ImageJPanel imageJP = new ImageJPanel(new ImageIcon(
-				"files/imgs/pencil.jpg").getImage());
-		imageJP.setBounds(360, 160, 100, 100);
-		imageJP.setLayout(null);
-		this.add(imageJP);
-		*/
 	}
 	
 	

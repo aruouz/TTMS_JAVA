@@ -55,7 +55,7 @@ public class StudioDAO implements iStudioDAO {
 					+ stu.getColCount() + ", " + " studio_introduction = '"
 					+ stu.getIntroduction() + "' ,studio_flag = "+stu.getStudio_flag();
 
-			sql += " where studio_id = " + stu.getID();
+			sql += " where studio_id = " + stu.getID()+" ORDER BY studio_id";
 			DBUtil db = new DBUtil();
 			db.openConnection();
 			rtn =db.execCommand(sql);
@@ -93,7 +93,7 @@ public class StudioDAO implements iStudioDAO {
 			condt.trim();
 			
 			if(!condt.isEmpty())
-				sql=sql+ condt; 
+				sql=sql+ condt+"  order by studio_id"; 
 			DBUtil db =new DBUtil();
 			if(!db.openConnection()){
 				System.out.print("fail to connect database");

@@ -14,7 +14,7 @@ public class Play {
 	private String play_name;
 	private String play_introduction;
 	private int play_length;
-	private float play_ticket_price;
+	private double play_ticket_price;
 	private int play_status;
 	private String play_image;
 	
@@ -67,12 +67,12 @@ public class Play {
 		this.play_length = play_length;
 	}
 	
-	public float getPlay_ticket_price(){
+	public double getPlay_ticket_price(){
 		return play_ticket_price;
 	}
 	
-	public void setPlay_ticket_price(float play_ticket_price){
-		this.play_ticket_price =  play_ticket_price;
+	public void setPlay_ticket_price(double d){
+		this.play_ticket_price =  d;
 	}
 	
 	public int getPlay_status(){

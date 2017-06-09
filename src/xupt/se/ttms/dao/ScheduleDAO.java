@@ -71,10 +71,10 @@ public class ScheduleDAO implements iScheduleDAO{
 		List<Schedule> sclList = null;
 		sclList = new LinkedList<Schedule>();
 		try{
-			String sql ="SELECT sched_id, studio_id, play_Id, sched_time,sched_ticket_price FROM schedule ";
+			String sql ="SELECT sched_id, studio_id, play_id, sched_time,sched_ticket_price FROM schedule ";
 			condt.trim();
 			if(!condt.isEmpty())
-				sql += "WHERE" + condt;
+				sql += condt+" ORDER BY sched_id";
 			DBUtil db = new DBUtil();
 			if(!db.openConnection()){
 				System.out.print("Fail to connect database");

@@ -15,75 +15,79 @@ import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+
+import xupt.se.ttms.model.Employee;
 import xupt.se.ttms.model.User;
-import xupt.se.ttms.service.UserSrv;
+import xupt.se.ttms.service.EmployeeSrv;
 import xupt.se.ttms.view.user.UserTableMouseListener;
+import xupt.se.ttms.model.*;
 import xupt.se.ttms.view.user.UserTable;
 import xupt.se.ttms.view.tmpl.MainUITmpl;
 
 class UserTableMouseListener extends MouseAdapter {
 
-	private JTable jt;
-	private static  User user;
 
-	public User getStudio() {
-		return user;
+	private JTable jt;
+	private static  Employee emp;
+
+	public Employee getStudio() {
+		return  emp;
 	}
 
-	public UserTableMouseListener(JTable jt, Object[] number, User user) {
-		this.user = user;
+	public UserTableMouseListener(JTable jt, Object[] number, Employee emp) {
+		this.emp = emp;
 		this.jt = jt;
 	}
 
 	// 监听到行号，将所选行的内容依次赋到 user对象，以便传有值对象到修改面板进行修改
 	public void mouseClicked(MouseEvent event) {
 		int row = jt.getSelectedRow();
-		user.setUserID(Integer.parseInt(jt.getValueAt(row, 0).toString()));
-		user.setName(jt.getValueAt(row, 1).toString());
-		user.setPassword(jt.getValueAt(row, 2).toString()); // 0
-		user.setEmail(jt.getValueAt(row, 3).toString());
-		user.setPhoneNumber(jt.getValueAt(row, 4).toString());
-		user.setAge(Integer.parseInt(jt.getValueAt(row, 5).toString()));
-		user.setSex(jt.getValueAt(row, 6).toString());
+		emp.setId(Integer.parseInt(jt.getValueAt(row, 0).toString()));
+		emp.setName(jt.getValueAt(row, 1).toString());
+		emp.setPassword(jt.getValueAt(row, 2).toString()); // 0
+		emp.setEmail(jt.getValueAt(row, 3).toString());
+		emp.setTel(jt.getValueAt(row, 4).toString());
+		emp.setAccess(Integer.parseInt(jt.getValueAt(row, 5).toString()));
+		emp.setcName(jt.getValueAt(row, 6).toString());
 		System.out.println(jt.getValueAt(row, 1).toString());
 	}
 }
 
 class UserTable {
 
-	private User user;
+	private Employee emp;
 	private JTable jt = null;
 
-	public UserTable(User user) {
-		this.user = user;
+	public UserTable(Employee emp) {
+		this.emp = emp;
 	}
 
 	// 创建JTable
-	public void createTable(JScrollPane jp, Object[] columnNames, List<User> userList) {
+	public void createTable(JScrollPane jp, Object[] columnNames, List<Employee> empList) {
 		try {
 
-			Object data[][] = new Object[userList.size()][columnNames.length];
+			Object data[][] = new Object[empList.size()][columnNames.length];
 
-			Iterator<User> itr = userList.iterator();
+			Iterator<Employee> itr = empList.iterator();
 			int i = 0;
 			while (itr.hasNext()) {
-				User user = itr.next();
-				data[i][0] = Integer.toString(user.getUserID());
-				data[i][1] = user.getName();
-				data[i][2] = user.getPassword();
-				data[i][3] = user.getEmail();
-				data[i][4] = user.getPhoneNumber();
-				data[i][5] = Integer.toString(user.getAge());
-				data[i][6] = user.getSex();
+				Employee emp = itr.next();
+				data[i][0] = Integer.toString(emp.getId());
+				data[i][1] = emp.getName();
+				data[i][2] = emp.getPassword();
+				data[i][3] = emp.getEmail();
+				data[i][4] = emp.getTel();
+				data[i][5] = Integer.toString(emp.getAccess());
+				data[i][6] = emp.getcName();
 				i++;
 			}
 
 			// 生成JTable
 			jt = new JTable(data, columnNames);
 			jt.setBounds(0, 0, 700, 450);
-
+			jt.setRowHeight(30);
 			// 添加鼠标监听，监听到所选行
-			UserTableMouseListener tml = new UserTableMouseListener(jt, columnNames, user);
+			UserTableMouseListener tml = new UserTableMouseListener(jt, columnNames, emp);
 			jt.addMouseListener(tml);
 
 			// 设置可调整列宽
@@ -119,6 +123,7 @@ public class UserMgrUI extends MainUITmpl{
 	// To be override by the detailed business block interface
 	@Override
 	protected void initContent() {
+		
 		Rectangle rect = contPan.getBounds();
 
 		ca1 = new JLabel("用户管理", JLabel.CENTER);
@@ -136,6 +141,7 @@ public class UserMgrUI extends MainUITmpl{
 //		contPan.add(input);
 
 		btnAdd = new JButton("添加");
+		btnAdd.setBackground(new Color(255,246,143));
 		btnAdd.setBounds(rect.width - 220, rect.height - 45, 60, 30);
 		btnAdd.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent Event) {
@@ -146,6 +152,7 @@ public class UserMgrUI extends MainUITmpl{
 
 
 		btnDel = new JButton("删除");
+		btnDel.setBackground(new Color(255,246,143));
 		btnDel.setBounds(rect.width - 120, rect.height - 45, 60, 30);
 		btnDel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent Event) {
@@ -184,27 +191,29 @@ public class UserMgrUI extends MainUITmpl{
 	private void btnDelClicked() {
 		int confirm = JOptionPane.showConfirmDialog(null, "确认删除所选？", "删除", JOptionPane.YES_NO_OPTION);
 		if (confirm == JOptionPane.YES_OPTION) {
-			UserSrv userSrv = new UserSrv();
+			EmployeeSrv userSrv = new EmployeeSrv();
 			userSrv.delete(user.getUserID());
 			showTable();
 		}
 	}
 
 	public void showTable() {
-		UserTable tms = new UserTable(user);
-		Object[] in = { "id", "name", "password", "email", "phoneNumber"," age" ,"sex"};
-		List<User> userList = new UserSrv().FetchAll();
+		UserTable tms = new UserTable(null);
+		
+		Object[] in = { "职工ID", "职工姓名", "密码", "邮箱", "电话","职位" ,"昵称"};
+		List<Employee> userList = new EmployeeSrv().FetchAll();
 
 		tms.createTable(jsc, in, userList);
 		jsc.repaint();
 	}
 
-	public static void main(String[] args) {
-		// TODO 自动生成的方法存根
-		UserMgrUI frmStuMgr = new UserMgrUI();
-		frmStuMgr.setVisible(true);
-	}
-
 	
+//	 public static void main(String[] args){
+//			UserMgrUI frmStuMgr = new UserMgrUI();
+//			frmStuMgr.setVisible(true);
+//		}
+//	
 
 }
+   
+

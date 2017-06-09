@@ -13,6 +13,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 public class PopUITmpl extends JDialog implements ActionListener {
+	
 	private JLabel lblName, lblpassword;
 	private JButton btnCancel, btnSave; 
 	
@@ -25,6 +26,7 @@ public class PopUITmpl extends JDialog implements ActionListener {
 	public JLabel windowName = new JLabel();
 
 	public PopUITmpl(){
+		contPan.setBackground(new Color(255,245,238));
 		this.setSize(frmWidth, frmHeight);
 		this.setLocationRelativeTo(null);
 		this.setResizable(false);
@@ -85,8 +87,10 @@ public class PopUITmpl extends JDialog implements ActionListener {
 	
 
 	//Set the name of the poppup window 
+	
 	public void setWindowName(String name){
 		windowName.setText(name);
+		windowName.setForeground(Color.BLACK);
 	}
 	
 	//To be override by the detailed business block interface 
@@ -97,37 +101,37 @@ public class PopUITmpl extends JDialog implements ActionListener {
 	
 	//To be override by the detailed business block interface 
 	protected void initContent(){
-		lblName = new JLabel("用户名：");
-		lblName.setBounds(60, 30, 100, 30);
-		contPan.add(lblName);
-		txtName = new JTextField();
-		txtName.setBounds(150, 30, 140, 30);
-		contPan.add(txtName);
-		
-		lblpassword = new JLabel("新密码：");
-		lblpassword.setBounds(60, 80, 100, 30);
-		contPan.add(lblpassword);
-		txtpassword = new JTextField();
-		txtpassword.setBounds(150, 80, 140, 30);
-		contPan.add(txtpassword);
-		
-		lblpassword = new JLabel("确认密码：");
-		lblpassword.setBounds(60, 130, 100, 30);
-		contPan.add(lblpassword);
-		txtpassword = new JTextField();
-		txtpassword.setBounds(150, 130, 140, 30);
-		contPan.add(txtpassword);
-		
-		btnSave = new JButton("保存");
-
-		btnSave.addActionListener(this);
-		btnSave.setBounds(60, 180, 60, 30);
-		contPan.add(btnSave);
-
-		btnCancel = new JButton("取消");
-		btnCancel.addActionListener(this);
-		btnCancel.setBounds(180, 180, 60, 30);
-		contPan.add(btnCancel);
+//		lblName = new JLabel("用户名：");
+//		lblName.setBounds(260, 30, 100, 30);
+//		contPan.add(lblName);
+//		txtName = new JTextField();
+//		txtName.setBounds(350, 30, 140, 30);
+//		contPan.add(txtName);
+//		
+//		lblpassword = new JLabel("新密码：");
+//		lblpassword.setBounds(260, 80, 100, 30);
+//		contPan.add(lblpassword);
+//		txtpassword = new JTextField();
+//		txtpassword.setBounds(350, 80, 140, 30);
+//		contPan.add(txtpassword);
+//		
+//		lblpassword = new JLabel("确认密码：");
+//		lblpassword.setBounds(260, 130, 100, 30);
+//		contPan.add(lblpassword);
+//		txtpassword = new JTextField();
+//		txtpassword.setBounds(350, 130, 140, 30);
+//		contPan.add(txtpassword);
+//		
+//		btnSave = new JButton("保存");
+//
+//		btnSave.addActionListener(this);
+//		btnSave.setBounds(260, 180, 60, 30);
+//		contPan.add(btnSave);
+//
+//		btnCancel = new JButton("取消");
+//		btnCancel.addActionListener(this);
+//		btnCancel.setBounds(380, 180, 60, 30);
+//		contPan.add(btnCancel);
 	}
 
 	@Override

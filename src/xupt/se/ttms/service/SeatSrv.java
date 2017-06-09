@@ -4,6 +4,7 @@ import java.util.List;
 
 import xupt.se.ttms.idao.DAOFactory;
 import xupt.se.ttms.idao.iSeatDAO;
+import xupt.se.ttms.model.Dict;
 import xupt.se.ttms.model.Seat;
 import xupt.se.ttms.model.Studio;
 
@@ -22,6 +23,9 @@ public class SeatSrv {
 		return setDAO.select(" studio_id= "+id);
 	}
 	
+	public static List<Seat> Fetch_r_c(int row, int col , int id){
+		return setDAO.select(" seat_row ="+row+" and seat_column ="+col+" and studio_id = "+id);
+	}
 	
 	public List<Seat> FetchAll(){
 		return setDAO.select("");
@@ -70,6 +74,10 @@ public class SeatSrv {
 			return -1;
 		}
 		return 0;
+	}
+
+	public static List<Seat> Fetch_id(int seat_id) {
+		return setDAO.select(" seat_id= "+seat_id);
 	}	
 
 }

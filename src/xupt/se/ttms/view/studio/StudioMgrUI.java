@@ -1,5 +1,6 @@
 ﻿package xupt.se.ttms.view.studio;
 
+
 import java.awt.Color;
 import java.awt.Label;
 import java.awt.Rectangle;
@@ -8,9 +9,9 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-import javax.lang.model.type.TypeKind;
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
@@ -25,13 +26,23 @@ import java.util.Iterator;
 
 import xupt.se.ttms.model.Studio;
 import xupt.se.ttms.service.StudioSrv;
+import xupt.se.ttms.view.seat.SeatUI;
 import xupt.se.ttms.view.tmpl.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
+
+import javax.swing.JFrame;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.WindowConstants;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableModel;
 
 
 class StudioTable {
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	private JTable jt;
 
@@ -46,15 +57,16 @@ class StudioTable {
 			};
 		};
 		tabModel.addColumn("id");
-		tabModel.addColumn("name");
-		tabModel.addColumn("row");
-		tabModel.addColumn("column");
-		tabModel.addColumn("desciption");
+		tabModel.addColumn("演出厅名称");
+		tabModel.addColumn("座位行数");
+		tabModel.addColumn("座位列数");
+		tabModel.addColumn("演出厅简介");
 		//初始化列明
 		jt=new JTable(tabModel);	
 		
 		//设置各列的宽度
 	    TableColumnModel columnModel = jt.getColumnModel();
+	    jt.setRowHeight(30);//设置表格行高
 	    
 	    //隐藏ID这一列
         TableColumn column = columnModel.getColumn(0);
@@ -70,7 +82,7 @@ class StudioTable {
         column = columnModel.getColumn(3);
         column.setPreferredWidth(10);
         column = columnModel.getColumn(4);
-        column.setPreferredWidth(500);        
+        column.setPreferredWidth(200);        
 
 		
 		jp.add(jt);
@@ -114,7 +126,7 @@ class StudioTable {
 					data[2] = Integer.toString(stu.getRowCount());
 					data[3] = Integer.toString(stu.getColCount());
 					data[4] = stu.getIntroduction();
-					tabModel.addRow(data);;
+					tabModel.addRow(data);
 				}
 				jt.invalidate();
 
@@ -137,7 +149,7 @@ public class StudioMgrUI extends MainUITmpl {
 	private JTextField input;
 
 	// 查找，编辑和删除按钮
-	private JButton btnAdd, btnEdit, btnDel, btnQuery;
+	private JButton btnAdd, btnEdit, btnDel, btnQuery,btnM;
 	
 	StudioTable tms; //显示演出厅列表
 
@@ -154,10 +166,12 @@ public class StudioMgrUI extends MainUITmpl {
 		ca1 = new JLabel("演出厅管理", JLabel.CENTER);
 		ca1.setBounds(0, 5, rect.width, 30);
 		ca1.setFont(new java.awt.Font("宋体", 1, 20));
-		ca1.setForeground(Color.blue);
+		ca1.setForeground(Color.black);
 		contPan.add(ca1);
 
 		jsc = new JScrollPane();
+		jsc.setOpaque(false);
+		jsc.getViewport().setOpaque(false);
 		jsc.setBounds(0, 40, rect.width, rect.height - 90);
 		contPan.add(jsc);
 
@@ -171,6 +185,7 @@ public class StudioMgrUI extends MainUITmpl {
 
 		// 查找 ，删除和编辑的按钮，其中含有相关的事件处理！
 		btnQuery = new JButton("查找");
+		btnQuery.setBackground(new Color(255,246,143));
 		btnQuery.setBounds(440, rect.height - 45, 60, 30);
 		btnQuery.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent Event) {
@@ -179,7 +194,19 @@ public class StudioMgrUI extends MainUITmpl {
 		});
 		contPan.add(btnQuery);
 
+		btnM = new JButton("座位管理");
+		btnM.setBackground(new Color(216,191,216));
+		btnM.setBounds(rect.width - 350, rect.height - 45, 100, 30);
+		btnM.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent Event) {
+				btnMClicked();
+			}
+		});
+		contPan.add(btnM);
+		
+		
 		btnAdd = new JButton("添加");
+		btnAdd.setBackground(new Color(255,246,143));
 		btnAdd.setBounds(rect.width - 220, rect.height - 45, 60, 30);
 		btnAdd.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent Event) {
@@ -189,6 +216,7 @@ public class StudioMgrUI extends MainUITmpl {
 		contPan.add(btnAdd);
 
 		btnEdit = new JButton("修改");
+		btnEdit.setBackground(new Color(255,246,143));
 		btnEdit.setBounds(rect.width - 150, rect.height - 45, 60, 30);
 		btnEdit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent Event) {
@@ -198,6 +226,7 @@ public class StudioMgrUI extends MainUITmpl {
 		contPan.add(btnEdit);
 
 		btnDel = new JButton("删除");
+		btnDel.setBackground(new Color(255,246,143));
 		btnDel.setBounds(rect.width - 80, rect.height - 45, 60, 30);
 		btnDel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent Event) {
@@ -226,7 +255,37 @@ public class StudioMgrUI extends MainUITmpl {
 			showTable();
 		}
 	}
+	
+	private void btnMClicked() {  //座位管理
 
+		if(null== tms.getStudio()){
+			JOptionPane.showMessageDialog(null, "请选择要管理座位的演出厅");
+			return; 
+		}
+		
+		  SeatUI seats = new SeatUI(tms.getStudio());
+		  seats.setLayout(null);
+		  
+		  SeatUI.sPanel.removeAll();
+		  SeatUI.bottom.removeAll();
+		  seats.initsPanel();
+		  seats.view_site();	
+		  
+		  SeatUI.sPanel.setBounds(50, 50, 120, 120);
+		  seats.add(SeatUI.sPanel);
+		  
+		  SeatUI.bottom.setBounds(140, 140, 700, 600);
+		  seats.add(SeatUI.bottom);
+		  
+		 
+	     
+	      seats.setSize(1024, 700);
+	      seats.setVisible(true);
+	      
+		
+	}
+
+	
 	private void btnModClicked() {
 		Studio stud = tms.getStudio();
 		if(null== stud){
@@ -256,6 +315,7 @@ public class StudioMgrUI extends MainUITmpl {
 		}		
 		
 		int confirm = JOptionPane.showConfirmDialog(null, "确认删除所选？", "删除", JOptionPane.YES_NO_OPTION);
+		
 		if (confirm == JOptionPane.YES_OPTION) {
 			StudioSrv stuSrv = new StudioSrv();
 			stuSrv.delete(stud.getID());

@@ -1,7 +1,8 @@
-package xupt.se.ttms.service;
+package xupt.se.ttms.test;
 import java.util.List;
 
 import xupt.se.ttms.model.Studio;
+import xupt.se.ttms.service.SeatSrv;
 
 public class test_seat {
 	public static void main(String[] args){
@@ -11,7 +12,6 @@ public class test_seat {
 		stu.setID(2);
 		stu.setColCount(20);
 		stu.setRowCount(20);
-		System.out.println(test1.FetchAll(stu));
 		
 	}
 }

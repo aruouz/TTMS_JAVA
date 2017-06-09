@@ -16,7 +16,7 @@ public class TicketDAO  implements iTicketDAO{
 		try{
 			String sql ="INSERT INTO ticket VALUES("+tik.getSeat_id()
 						+","+tik.getSched_id()+","+tik.getTicket_price()
-						+","+tik.getTicket_status()+","+tik.getTicket_locked_time()+")";
+						+","+tik.getTicket_status()+",'"+tik.getTicket_locked_time()+"')";
 			DBUtil db =new DBUtil();
 			db.openConnection();
 			ResultSet rst = db.getInsertObjectIDs(sql);
@@ -37,9 +37,9 @@ public class TicketDAO  implements iTicketDAO{
 	public int update(Ticket tik) {
 		int rtn = 0;
 		try{
-			String sql = "UPDATE ticket set ticket_stutas="
+			String sql = "UPDATE ticket set ticket_status="
 					+tik.getTicket_status();
-			sql+="WHERE ticket_id = "+tik.getTicket_id();
+			sql+=" WHERE ticket_id = "+tik.getTicket_id();
 			DBUtil db =new DBUtil();
 			db.openConnection();
 			rtn = db.execCommand(sql);
@@ -51,6 +51,19 @@ public class TicketDAO  implements iTicketDAO{
 	}
 
 
+	public int delete(int ticket_id) {
+		int  rtn=0;
+		try{
+		String sql="DELETE FROM ticket WHERE ticekt_id="+ticket_id;
+		DBUtil db = new DBUtil();
+		db.openConnection();
+		rtn=db.execCommand(sql);
+		db.close();
+		}catch (Exception e) {
+		e.printStackTrace();
+		}
+		return rtn;	
+}
 	@Override
 	public List<Ticket> select(String condt) {
 		List<Ticket> tikList = null;
@@ -61,7 +74,7 @@ public class TicketDAO  implements iTicketDAO{
 			condt.trim();
 			
 			if(!condt.isEmpty())
-				sql=sql+ condt; 
+				sql=sql+ condt+" ORDER BY ticket_id"; 
 			DBUtil db =new DBUtil();
 			if(!db.openConnection()){
 				System.out.print("fail to connect database");
@@ -122,4 +135,7 @@ public class TicketDAO  implements iTicketDAO{
 		}
 		return rtn;
 	}
+
+
+
 }

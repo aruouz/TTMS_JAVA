@@ -1,4 +1,4 @@
-package xupt.se.ttms.dao;
+package xupt.se.ttms.test;
 
 import java.util.List;
 

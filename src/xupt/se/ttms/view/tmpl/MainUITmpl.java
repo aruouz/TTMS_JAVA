@@ -19,7 +19,7 @@ import java.awt.Insets;
 import xupt.se.ttms.view.system.*;
 import xupt.se.ttms.service.LoginedUser;
 
-/**
+/**  
  * @author Administrator
  *
  */
@@ -34,12 +34,12 @@ public class MainUITmpl extends JFrame  {
 	protected final JPanel contPan = new JPanel();
 	protected JLabel usrLabel = new JLabel();
 	protected JLabel usrName = new JLabel();
-	protected JButton btnModPwd = new JButton("修改密码");
+//	protected JButton btnModPwd = new JButton("修改密码");
 	protected JButton btnExit = new JButton("返回");	
 
 	public MainUITmpl(){
+		contPan.setBackground(new Color(255,245,238));
 		this.setSize(frmWidth, frmHeight);
-		this.setLocationRelativeTo(null);
 		this.setResizable(false);
 		this.setTitle("云影剧院票务管理系统");
 		this.setLayout(null);
@@ -48,6 +48,7 @@ public class MainUITmpl extends JFrame  {
 				onWindowClosing();
 			}
 		});		
+		
 		
 		headPan.setBounds(0, 0, frmWidth, 80);
 		headPan.setLayout(null);
@@ -97,27 +98,28 @@ public class MainUITmpl extends JFrame  {
 			usrName.setBounds(frmWidth-80, 5, 80, 30);
 			usrName.setText("匿名");
 			usrName.setFont(new java.awt.Font("宋体", 1, 15));
-			usrName.setForeground(Color.blue);				
+			usrName.setForeground(Color.black);				
 			headPan.add(usrName);
 			
-			btnModPwd.setBounds(frmWidth-160, 40, 80, 30);
-			btnModPwd.setMargin(new Insets(0,0,0,0));
-			btnModPwd.setContentAreaFilled(false);
-			headPan.add(btnModPwd);
-			btnModPwd.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent Event) {
-					btnModUserClicked();
-				}
-			});
+//			btnModPwd.setBounds(frmWidth-160, 40, 80, 30);
+//			btnModPwd.setMargin(new Insets(0,0,0,0));
+//			btnModPwd.setContentAreaFilled(false);
+//			headPan.add(btnModPwd);
+//			btnModPwd.addActionListener(new ActionListener() {
+//				public void actionPerformed(ActionEvent Event) {
+//					btnModUserClicked();
+//				}
+//			});
 			
-			btnExit.setBounds(frmWidth-80, 40, 80, 30);
+			btnExit.setBounds(frmWidth-100, 40, 80, 30);
 			btnExit.setContentAreaFilled(false);
+			
 			btnExit.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent Event) {
 					btnExitClicked(Event);
 				}
 			});
-			
+
 			headPan.add(btnExit);	
 			
 			//Show the information of current user
@@ -134,7 +136,7 @@ public class MainUITmpl extends JFrame  {
 		
 		
 		SysUserModUI dlgUserMod=new SysUserModUI();
-		dlgUserMod.setModal(true);
+		dlgUserMod.setModal();
 		dlgUserMod.setVisible(true);
 	}	
 	
@@ -160,7 +162,8 @@ public class MainUITmpl extends JFrame  {
 	
 	//To be override by the detailed business block interface 
 	protected void btnExitClicked(ActionEvent Event){
-		System.exit(0);
+		setVisible(false);
+//		System.exit(0);
 	}	
 
 }

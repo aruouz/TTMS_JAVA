@@ -1,134 +1,151 @@
 package xupt.se.ttms.view.play;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
-
+import java.awt.Label;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.Iterator;
-import java.util.List;
 
+import javax.lang.model.type.TypeKind;
 import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
+import javax.swing.table.TableColumnModel;
 
+import java.util.List;
+import java.util.Iterator;
+import xupt.se.ttms.model.Dict;
 import xupt.se.ttms.model.Play;
-
+import xupt.se.ttms.service.DictSrv;
 import xupt.se.ttms.service.PlaySrv;
-import xupt.se.ttms.service.StudioSrv;
-import xupt.se.ttms.view.play.PlayTableMouseListener;
 import xupt.se.ttms.view.play.PlayTable;
-import xupt.se.ttms.view.tmpl.MainUITmpl;
-
-class PlayTableMouseListener extends MouseAdapter {
-
-	private JTable jt;
-	private static Play play;
-
-	public Play getPlay() {
-		return play;
-	}
-
-	public PlayTableMouseListener(JTable jt, Object[] number, Play play) {
-		this.play = play;
-		this.jt = jt;
-	}
-
-	// 监听到行号，将所选行的内容依次赋到 play对象，以便传有值对象到修改面板进行修改
-	public void mouseClicked(MouseEvent event) {
-		int row = jt.getSelectedRow();
-		play.setPlay_id(Integer.parseInt(jt.getValueAt(row, 0).toString()));
-		play.setPlay_type_id(Integer.parseInt(jt.getValueAt(row, 1).toString()));
-		play.setPlay_lang_id(Integer.parseInt(jt.getValueAt(row, 2).toString()));
-		play.setPlay_name(jt.getValueAt(row, 3).toString());
-		
-		if (jt.getValueAt(row, 4) != null)
-			play.setPlay_introduction(jt.getValueAt(row, 4).toString());
-		else
-			play.setPlay_introduction("");
-		System.out.println(jt.getValueAt(row, 1).toString());
-		play.setPlay_length(Integer.parseInt(jt.getValueAt(row, 5).toString()));	
-		play.setPlay_ticket_price(Integer.parseInt(jt.getValueAt(row, 6).toString()));
-		play.setPlay_status(Integer.parseInt(jt.getValueAt(row, 7).toString()));
-		
-		
-	}
-}
+import xupt.se.ttms.view.play.PlayMgrUI;
+import xupt.se.ttms.view.play.PlaySelectUI;
+import xupt.se.ttms.view.play.PlayAddUI;
+import xupt.se.ttms.view.play.PlayEditUI;
+import xupt.se.ttms.view.play.PlayTable;
+import xupt.se.ttms.view.tmpl.*;
 
 class PlayTable {
+	private static final long serialVersionUID = 1L;
+	private JTable jt;
 
-	private Play play;
-	private JTable jt = null;
+	public PlayTable(JScrollPane jp) {
+		DefaultTableModel tabModel=new DefaultTableModel(){
+			private static final long serialVersionUID = 1L;
 
-	public PlayTable(Play play) {
-		this.play = play;
+			@Override              
+			public boolean isCellEditable(int row,int column){
+				return false;              
+			};
+		};
+		tabModel.addColumn("剧目ID");
+		tabModel.addColumn("类型");
+		tabModel.addColumn("语言");
+		tabModel.addColumn("名称");
+		tabModel.addColumn("简介");
+		tabModel.addColumn("时长");
+		tabModel.addColumn("票价");
+		tabModel.addColumn("演出状态");
+		jt=new JTable(tabModel);
+		TableColumnModel columnModel = jt.getColumnModel();
+		jt.setRowHeight(30);
+		TableColumn column = columnModel.getColumn(0);
+        column.setMinWidth(0);
+        column.setMaxWidth(0);
+        column.setWidth(0);
+        column.setPreferredWidth(0);
+        column = columnModel.getColumn(1);
+        column.setPreferredWidth(10);
+        column = columnModel.getColumn(2);
+        column.setPreferredWidth(10);
+        column = columnModel.getColumn(3);
+        column.setPreferredWidth(10);
+        column = columnModel.getColumn(4);
+        column.setPreferredWidth(200); 
+        column = columnModel.getColumn(5);
+        column.setPreferredWidth(10); 
+        column = columnModel.getColumn(6);
+        column.setPreferredWidth(10); 
+        column = columnModel.getColumn(7);
+        column.setPreferredWidth(10); 
+        jp.add(jt);
+		jp.setViewportView(jt);
 	}
-
+	public Play getPlay() {
+		int row = jt.getSelectedRow();
+		if(row>=0){
+			Play play = new Play();
+			play.setPlay_id(Integer.parseInt(jt.getValueAt(row, 0).toString()));
+			int play_type_id=DictSrv.Fetch_value_id((jt.getValueAt(row, 1).toString())).get(0).getDict_id();
+			play.setPlay_type_id(play_type_id);
+			int play_lang_id=DictSrv.Fetch_value_id((jt.getValueAt(row, 2).toString())).get(0).getDict_id();
+			play.setPlay_lang_id(play_lang_id);
+			play.setPlay_name(jt.getValueAt(row, 3).toString());
+			play.setPlay_introduction(jt.getValueAt(row, 4).toString());
+			play.setPlay_length(Integer.parseInt(jt.getValueAt(row, 5).toString()));	
+			play.setPlay_ticket_price(Double.parseDouble(jt.getValueAt(row, 6).toString()));
+			int status=PlaySrv.r_status(jt.getValueAt(row, 7).toString());
+			play.setPlay_status(status);
+			return play;
+		}else{
+			return null;
+		}
+	}
 	// 创建JTable
-	public void createTable(JScrollPane jp, Object[] columnNames, List<Play> playList) {
+	public void showPlayList(List<Play> playList) {
 		try {
-
-			Object data[][] = new Object[playList.size()][columnNames.length];
-
+			DefaultTableModel tabModel = (DefaultTableModel) jt.getModel();
+			tabModel.setRowCount(0);
+			
 			Iterator<Play> itr = playList.iterator();
-			int i = 0;
 			while (itr.hasNext()) {
 				Play play = itr.next();
-				data[i][0] = Integer.toString(play.getPlay_id());
-				data[i][1] = Integer.toString(play.getPlay_type_id());
-				data[i][2] = Integer.toString(play.getPlay_lang_id());
-				data[i][3] = play.getPlay_name();
-				data[i][4] = play.getPlay_introduction();
-				data[i][5] = Integer.toString(play.getPlay_length());
-				data[i][6] = play.getPlay_ticket_price()+"";
-				data[i][7] = Integer.toString(play.getPlay_status());
-				i++;
+				Object data[] = new Object[8];
+				data[0] = Integer.toString(play.getPlay_id());
+				List<Dict> list1=DictSrv.Fetch_Value(play.getPlay_type_id());
+				data[1] = list1.get(0).getDict_value();
+				List<Dict> list2=DictSrv.Fetch_Value(play.getPlay_lang_id());
+				data[2] = list2.get(0).getDict_value();
+				data[3] = play.getPlay_name();
+				data[4] = play.getPlay_introduction();
+				data[5] = Integer.toString(play.getPlay_length());
+				data[6] = play.getPlay_ticket_price()+"";
+				data[7] = PlaySrv.status(play.getPlay_status());
+				tabModel.addRow(data);
 			}
-
-			// 生成JTable
-			jt = new JTable(data, columnNames);
-			jt.setBounds(0, 0, 700, 450);
-
-			// 添加鼠标监听，监听到所选行
-			PlayTableMouseListener tml = new PlayTableMouseListener(jt, columnNames, play);
-			jt.addMouseListener(tml);
-
-			// 设置可调整列宽
-			jt.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
-
-			jp.add(jt);
-			jp.setViewportView(jt);
+			jt.invalidate();
 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 }
-
-public class PlayMgrUI  extends MainUITmpl{
+public class PlayMgrUI extends MainUITmpl {
 	private static final long serialVersionUID = 1L;
-	private Play play=new Play();
-	private JLabel ca1 = null; // 界面提示
-	// 用来放表格的滚动控件
+	private JLabel ca1 = null; 
+
 	private JScrollPane jsc;
-	// 查找的提示和输出
+	
 	private JLabel hint;
 	private JTextField input;
-
 	// 查找，编辑和删除按钮
 	private JButton btnAdd, btnEdit, btnDel, btnQuery;
-
+	PlayTable tms; 
 	public PlayMgrUI() {
-		// TODO 自动生成的构造函数存根
+			
 	}
 
-	// To be override by the detailed business block interface
-	@Override
 	protected void initContent() {
 		Rectangle rect = contPan.getBounds();
 
@@ -152,6 +169,7 @@ public class PlayMgrUI  extends MainUITmpl{
 
 		// 查找 ，删除和编辑的按钮，其中含有相关的事件处理！
 		btnQuery = new JButton("查找");
+		btnQuery.setBackground(new Color(255,246,143));
 		btnQuery.setBounds(440, rect.height - 45, 60, 30);
 		btnQuery.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent Event) {
@@ -159,8 +177,9 @@ public class PlayMgrUI  extends MainUITmpl{
 			}
 		});
 		contPan.add(btnQuery);
-
+		
 		btnAdd = new JButton("添加");
+		btnAdd.setBackground(new Color(255,246,143));
 		btnAdd.setBounds(rect.width - 220, rect.height - 45, 60, 30);
 		btnAdd.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent Event) {
@@ -170,6 +189,7 @@ public class PlayMgrUI  extends MainUITmpl{
 		contPan.add(btnAdd);
 
 		btnEdit = new JButton("修改");
+		btnEdit.setBackground(new Color(255,246,143));
 		btnEdit.setBounds(rect.width - 150, rect.height - 45, 60, 30);
 		btnEdit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent Event) {
@@ -179,6 +199,7 @@ public class PlayMgrUI  extends MainUITmpl{
 		contPan.add(btnEdit);
 
 		btnDel = new JButton("删除");
+		btnDel.setBackground(new Color(255,246,143));
 		btnDel.setBounds(rect.width - 80, rect.height - 45, 60, 30);
 		btnDel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent Event) {
@@ -187,34 +208,54 @@ public class PlayMgrUI  extends MainUITmpl{
 		});
 		contPan.add(btnDel);
 		contPan.add(ca1);
+		
+		tms = new PlayTable(jsc);
+		
 		showTable();
 	}
-
 	private void btnAddClicked() {
-		PlayAddUI addStud = new PlayAddUI();
-		addStud.setWindowName("添加剧目");
-		addStud.toFront();
-		addStud.setModal(true);
-		addStud.setVisible(true);
-
-		if (addStud.getReturnStatus()) {
-			showTable();
-		}
-	}
-
-	private void btnModClicked() {
+		PlayAddUI addPlayUI=null;
+		addPlayUI = new PlayAddUI();
+		addPlayUI.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+		addPlayUI.setWindowName("添加剧目");
+		addPlayUI.toFront();
+		addPlayUI.setModalityType(JDialog.ModalityType.APPLICATION_MODAL);
+		addPlayUI.setVisible(true);
+		if (addPlayUI.getReturnStatus()) {
+			tms = new PlayTable(jsc);
 			
-		PlayEditUI modStu = new PlayEditUI(play);
-		modStu.setWindowName("修改剧目信息");
-		modStu.toFront();
-		modStu.setModal(true);
-		modStu.setVisible(true);
-		if (modStu.getReturnStatus()) {
+			
 			showTable();
 		}
+		
 	}
-
+	private void btnModClicked() {
+		Play play = tms.getPlay();
+		if(null== play){
+			JOptionPane.showMessageDialog(null, "请选择要修改的剧目");
+			return; 
+		}
+		PlayEditUI modPlayUI = new PlayEditUI(play);
+		modPlayUI.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+		modPlayUI.setWindowName("修改剧目");
+		modPlayUI.initData(play);
+		modPlayUI.toFront();
+		modPlayUI.setModal(true);
+		modPlayUI.setModalityType(JDialog.ModalityType.APPLICATION_MODAL);
+		modPlayUI.setVisible(true);
+		if (modPlayUI.getReturnStatus()) {	
+			showTable();		
+		}
+//		contPan.removeAll();
+//			contPan.repaint();
+		
+	}
 	private void btnDelClicked() {
+		Play play = tms.getPlay();
+		if(null== play){
+			JOptionPane.showMessageDialog(null, "请选择要删除的剧目");
+			return; 
+		}		
 		int confirm = JOptionPane.showConfirmDialog(null, "确认删除所选？", "删除", JOptionPane.YES_NO_OPTION);
 		if (confirm == JOptionPane.YES_OPTION) {
 			PlaySrv playSrv = new PlaySrv();
@@ -222,29 +263,28 @@ public class PlayMgrUI  extends MainUITmpl{
 			showTable();
 		}
 	}
-
 	private void btnQueryClicked() {
-		if (!input.getText().equals("")) {
-
-
+		String play_name = input.getText();
+		if (!play_name.equals("")) {
+			//请自行补充
+			PlaySelectUI SelectPlayUI = null;
+			SelectPlayUI = new PlaySelectUI();
+			SelectPlayUI.Select(play_name);
+			SelectPlayUI.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+			SelectPlayUI.setWindowName("剧目信息");
+			SelectPlayUI.toFront();
+			SelectPlayUI.setModalityType(JDialog.ModalityType.APPLICATION_MODAL);
+			SelectPlayUI.setVisible(true);			
 		} else {
 			JOptionPane.showMessageDialog(null, "请输入检索条件");
 		}
 	}
-
-	public void showTable() {
-		PlayTable tms = new PlayTable(play);
-		Object[] in = { "play_id", "play_type_id", "play_lang_id", "play_name", "play_introduction","play_length","play_ticket_price","play_status"};
+	private void showTable() {
 		List<Play> playList = new PlaySrv().FetchALL();
-
-		tms.createTable(jsc, in, playList);
-		jsc.repaint();
+		tms.showPlayList(playList);
 	}
-
 	public static void main(String[] args) {
-		// TODO 自动生成的方法存根
 		PlayMgrUI frmPlayMgr = new PlayMgrUI();
 		frmPlayMgr.setVisible(true);
 	}
-
 }

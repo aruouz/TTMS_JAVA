@@ -11,11 +11,11 @@ import xupt.se.ttms.model.Play;
 public class PlaySrv {
 	private static iPlayDAO plyDAO = DAOFactory.creatPlayDAO();
 	
-	public int add(Play ply){
+	public static int add(Play ply){
 		return plyDAO.insert(ply);
 	}
 	
-	public int modify(Play ply){
+	public static int modify(Play ply){
 		return plyDAO.update(ply);
 	}
 	
@@ -23,24 +23,19 @@ public class PlaySrv {
 		return plyDAO.delete(ID);
 	}
 	
-	public static List<Play> Fetch(String condt){
-		return plyDAO.select(" play_name = "+ condt);
+	public static List<Play> Fetch_name(String condt){
+		return plyDAO.select(" WHERE play_name = "+"'"+condt+"'");
 	}
 	
 	public List<Play> FetchALL(){
 		return plyDAO.select("");
 	}
 	
-	public List<Play> Fetch_id(int id){
-		return plyDAO.select( " play_id ="+id);
+	public static List<Play> Fetch_id(int id){
+		return plyDAO.select( " WHERE play_id ="+id);
 	}
 	
-	
-	public String photo(Play ply){
-		return plyDAO.read(ply);
-	}
-	
-	public String status(int sta){
+	public static String status(int sta){
 		String rtn = null;
 		if(sta == 0){
 			rtn = "未安排演出";
@@ -55,7 +50,7 @@ public class PlaySrv {
 		return rtn;
 	}
 	
-	public int r_status(String sta){
+	public static int r_status(String sta){
 		int rtn = 0;
 		if(sta=="未安排演出"){
 			rtn =0;

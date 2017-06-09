@@ -1,52 +1,63 @@
 package xupt.se.ttms.view.play;
 
+import java.util.List;
+
 import javax.swing.JOptionPane;
 
-
+import xupt.se.ttms.model.Dict;
 import xupt.se.ttms.model.Play;
+import xupt.se.ttms.model.Studio;
+import xupt.se.ttms.service.DictSrv;
 import xupt.se.ttms.service.PlaySrv;
 import xupt.se.ttms.view.play.PlayAddUI;
 
 public class PlayEditUI extends PlayAddUI {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 8069153395833603461L;
+	private static final long serialVersionUID = 1L;
+	private Play ply;
 
 	public PlayEditUI(Play play) {
 		initData(play);
 	}
 
-	private void initData(Play play) {
+	public void initData(Play play) {
+		this.setTitle("修改剧目信息");
+		if(null== play){
+			return;
+		}
 		txtName.setText(play.getPlay_name());
-		txttype.setText(Integer.toString(play.getPlay_type_id()));
-		txtlang.setText(Integer.toString(play.getPlay_lang_id()));
+		List<Dict> list1=DictSrv.Fetch_Value(play.getPlay_type_id());
+		jcbtype.setSelectedItem(list1.get(0).getDict_value()); 
+		List<Dict> list2=DictSrv.Fetch_Value(play.getPlay_lang_id());
+		jcblan.setSelectedItem(list2.get(0).getDict_value());
 		txtintroduction.setText(play.getPlay_introduction());
-		txtlength.setText(Integer.toString(play.getPlay_length()));
+		jcbl.setSelectedItem(Integer.toString(play.getPlay_length()));
 		txtticketPrice.setText(play.getPlay_ticket_price()+"");
-		txtstatus.setText(Integer.toString(play.getPlay_status()));
+		jcbsta.setSelectedItem(PlaySrv.status(play.getPlay_status()));
+		ply=play;
+		this.invalidate();
 	}
 
 	@Override
-protected void btnSaveClicked(){
-		
-		if (txtName.getText() != null && txttype.getText() != null && txtlang.getText() != null && txtintroduction.getText() != null && txtlength .getText() != null && txtticketPrice.getText() != null && txtstatus.getText() != null ) {
+	protected void btnSaveClicked(){
+		if(txtName.getText()!=null){
 			PlaySrv playSrv = new PlaySrv();
-			Play play=new Play();
+			Play play=ply;
 			play.setPlay_name(txtName.getText());
-			play.setPlay_type_id(Integer.parseInt(txttype.getText()));
-			play.setPlay_lang_id(Integer.parseInt(txtlang.getText()));
-			play.setPlay_introduction("test");
-			play.setPlay_length(Integer.parseInt(txtlength.getText()));
-			play.setPlay_ticket_price(Integer.parseInt(txtticketPrice.getText()));
-			play.setPlay_status(Integer.parseInt(txtstatus.getText()));
-
-			playSrv.modify(play);
+			java.util.List<Dict> list1=DictSrv.Fetch_value_id(jcbtype.getSelectedItem().toString());
+			play.setPlay_type_id(list1.get(0).getDict_id());
+			java.util.List<Dict> list2=DictSrv.Fetch_value_id(jcblan.getSelectedItem().toString());
+			play.setPlay_lang_id(list2.get(0).getDict_id());
+			play.setPlay_introduction(txtintroduction.getText());
+			play.setPlay_length(Integer.parseInt(jcbl.getSelectedItem().toString()));
+			play.setPlay_ticket_price(Double.parseDouble(txtticketPrice.getText()));
+			int list3=PlaySrv.r_status(jcbsta.getSelectedItem().toString());
+			play.setPlay_status(list3);
+	
+			PlaySrv.modify(play);
 			this.setVisible(false);
 			rst=true;
-			getParent().setVisible(true);
-		} else {
+		}else {
 			JOptionPane.showMessageDialog(null, "数据不完整");
-		}		
+		}
 	}
 }

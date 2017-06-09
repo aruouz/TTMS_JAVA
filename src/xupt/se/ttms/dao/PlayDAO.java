@@ -15,15 +15,15 @@ public class PlayDAO implements iPlayDAO{
 	@Override
 	public int insert(Play ply){
 		try{
-			String  sql ="INSERT INTO play "
+			String  sql ="INSERT INTO play(play_type_id,play_lang_id,play_name,play_introduction,play_length,play_ticket_price,play_status) "
 					+" VALUES("+ply.getPlay_type_id()+","
 					+ply.getPlay_lang_id()+","+" '"
 					+ply.getPlay_name()+"' , '"
 					+ply.getPlay_introduction()+"', "
 					+ply.getPlay_length()+","
 					+ply.getPlay_ticket_price()+","
-					+ply.getPlay_status()+","
-					+ply.getPlay_image()+")";
+					+ply.getPlay_status()
+					+")";
 			DBUtil db = new DBUtil();
 			db.openConnection();
 			ResultSet rst = db.getInsertObjectIDs(sql);
@@ -51,7 +51,7 @@ public class PlayDAO implements iPlayDAO{
 						+"',play_introduction='"+ply.getPlay_introduction()
 						+"',play_length="+ply.getPlay_length()
 						+",play_ticket_Price="+ply.getPlay_ticket_price()
-						+",play_status="+ply.getPlay_status()+",play_image="+ply.getPlay_image()+ ",where play_id ="+ply.getPlay_id();
+						+",play_status="+ply.getPlay_status()+ "  where play_id ="+ply.getPlay_id();
 			
 			DBUtil db = new DBUtil();
 			db.openConnection();
@@ -89,7 +89,7 @@ public class PlayDAO implements iPlayDAO{
 					+ "play_ticket_price,play_status from play";
 			condt.trim();
 			if(!condt.isEmpty())
-					sql+= "where" + condt;
+					sql=sql+ condt+" ORDER BY play_id";
 			DBUtil db = new  DBUtil();
 			if(!db.openConnection()){
 				System.out.print("fail to connect database");

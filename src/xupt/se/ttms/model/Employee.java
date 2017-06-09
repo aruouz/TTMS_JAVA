@@ -1,14 +1,23 @@
 ﻿package xupt.se.ttms.model;
 
-import java.io.Serializable;
 
-public class Employee implements Serializable {
+
+public class Employee  {
 	private int access;
 	private int id;
 	private String name;
 	private String password;
 	private String cName;
 	private String tel;
+	private String email;
+	
+	public String getEmail(){
+		return email;
+	}
+	
+	public void setEmail(String email){
+		this.email = email;
+	}
 	
 	public String getcName() {
 		return cName;
@@ -28,13 +37,6 @@ public class Employee implements Serializable {
 
 	public Employee(){
 		
-	}
-
-	public Employee(int access, int id, String name, String password) {
-		this.access = access;
-		this.id = id;
-		this.name = name;
-		this.password = password;
 	}
 
 	public int getAccess() {
@@ -69,8 +71,6 @@ public class Employee implements Serializable {
 		this.password = password;
 	}
 
-	public void showValue() {
-		System.out.println("编号：" + id + "\t姓名：" + name);
-	}
+
 
 }

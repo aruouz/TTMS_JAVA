@@ -1,7 +1,7 @@
 package xupt.se.ttms.dao;
 
 import xupt.se.ttms.model.User;
-import xupt.se.ttms.service.UserSrv;
+import xupt.se.unfinished.UserSrv;
 
 public class User_test {
 	public static void main(String [] args){

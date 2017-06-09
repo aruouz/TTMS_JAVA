@@ -1,5 +1,6 @@
 package xupt.se.ttms.view.user;
 
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -12,11 +13,13 @@ import javax.swing.JOptionPane;
 
 import javax.swing.JTextField;
 
+import xupt.se.ttms.model.Employee;
 //import view.studioUI.ImageJPanel;
 import xupt.se.ttms.model.User;
-import xupt.se.ttms.service.UserSrv;
+import xupt.se.ttms.service.EmployeeSrv;
 import xupt.se.ttms.view.studio.ImageJPanel;
 import xupt.se.ttms.view.tmpl.*;
+
 public class UserAddUI extends PopUITmpl implements ActionListener {
 
 	private JButton btnCancel, btnSave; 	//取消，保存按鈕
@@ -32,7 +35,7 @@ public class UserAddUI extends PopUITmpl implements ActionListener {
 	protected void initContent(){
 		this.setTitle("添加新用户");
 
-		lblName = new JLabel("用户名：");
+		lblName = new JLabel("姓名：");
 		lblName.setBounds(60, 30, 80, 30);
 		contPan.add(lblName);
 		txtName = new JTextField();
@@ -60,14 +63,14 @@ public class UserAddUI extends PopUITmpl implements ActionListener {
 		txtPhoneNumber.setBounds(150, 180, 120, 30);
 		contPan.add(txtPhoneNumber);
 		
-		lblage = new JLabel("年龄：");
+		lblage = new JLabel("职位");
 		lblage.setBounds(60, 230, 90, 30);
 		contPan.add(lblage);
 		txtage = new JTextField();
 		txtage.setBounds(150, 230, 120, 30);
 		contPan.add(txtage);
 		
-		lblsex = new JLabel("性别：");
+		lblsex = new JLabel("昵称：");
 		lblsex.setBounds(60, 280, 90, 30);
 		contPan.add(lblsex);
 		txtsex = new JTextField();
@@ -75,12 +78,13 @@ public class UserAddUI extends PopUITmpl implements ActionListener {
 		contPan.add(txtsex);
 
 		btnSave = new JButton("保存");
-
+		btnSave.setBackground(new Color(255,246,143));
 		btnSave.addActionListener(this);
 		btnSave.setBounds(60, 330, 60, 30);
 		contPan.add(btnSave);
 
 		btnCancel = new JButton("取消");
+		btnCancel.setBackground(new Color(255,246,143));
 		btnCancel.addActionListener(this);
 		btnCancel.setBounds(180, 330, 60, 30);
 		contPan.add(btnCancel);
@@ -113,17 +117,17 @@ public class UserAddUI extends PopUITmpl implements ActionListener {
 	protected void btnSaveClicked(){
 		if (txtName.getText() != null && txtpassword.getText() != null
 				&& txtemail.getText() != null && txtPhoneNumber.getText() != null && txtage.getText() != null && txtsex.getText() != null ) {
-			UserSrv userSrv = new UserSrv();
-			User user=new User();
-			user.setName(txtName.getText());
-			user.setPassword(txtpassword.getText());
-			user.setEmail(txtemail.getText());
-			user.setPhoneNumber(txtPhoneNumber.getText());
-			user.setAge(Integer.parseInt(txtage.getText()));
-			user.setSex(txtsex.getText());
+			EmployeeSrv userSrv = new EmployeeSrv();
+			Employee emp=new Employee();
+			emp.setName(txtName.getText());
+			emp.setPassword(txtpassword.getText());
+			emp.setEmail(txtemail.getText());
+			emp.setTel(txtPhoneNumber.getText());
+			emp.setAccess(Integer.parseInt(txtage.getText()));
+			emp.setcName(txtsex.getText());
 		
 
-			userSrv.add(user);
+			EmployeeSrv.add(emp);
 			this.setVisible(false);
 			rst=true;
 			getParent().setVisible(true);

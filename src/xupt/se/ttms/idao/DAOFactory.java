@@ -1,5 +1,7 @@
 package xupt.se.ttms.idao;
 import xupt.se.ttms.dao.*;
+import xupt.se.ttms.model.Employee;
+import xupt.se.ttms.model.Sale_item;
 
 public class DAOFactory {
 	public static iStudioDAO creatStudioDAO(){
@@ -24,5 +26,20 @@ public class DAOFactory {
 	
 	public static iTicketDAO createTicketDAO(){
 		return new TicketDAO();
+	}
+	
+	public static iDictDAO createDictDAO(){
+		return  new DictDAO();
+	}
+	
+	public static iEmployeeDAO createEmployee(){
+		return new EmployeeDAO();
+	}
+	
+	public static iSaleDAO createSaleDAO(){
+		return new SaleDAO();
+	}
+	public static iSale_itemDAO creatSale_item(){
+		return new Sale_itemDAO();
 	}
 }

@@ -50,9 +50,10 @@ public class SeatDAO implements iSeatDAO{
 	public int update(Seat seat){
 		int rtn = 0;
 		try{
-			String sql = "UPDATE seat_status = "+ seat.getSeat_status()+ " FROM seat";
-			sql+= "WHERE seat_id = "+seat.getSeat_id();
+			String sql = "UPDATE seat set seat_status = "+ seat.getSeat_status();
+			sql+= " WHERE seat_id="+seat.getSeat_id();
 			DBUtil db=new DBUtil();
+			db.openConnection();
 			rtn = db.execCommand(sql);
 			db.close();
 		}catch (Exception e) {
@@ -66,10 +67,10 @@ public class SeatDAO implements iSeatDAO{
 		List<Seat> seatList = null;
 		seatList = new LinkedList<Seat>();
 		try{
-			String sql ="SELECT seat_id, studio_id, seat_row,seat_column FROM seat";
+			String sql ="SELECT seat_id, studio_id, seat_row,seat_column,seat_status FROM seat";
 			condt.trim();
 			if(!condt.isEmpty())
-				sql += " WHERE " +condt;
+				sql += " WHERE " +condt+" ORDER BY seat_id";
 			DBUtil db = new DBUtil();
 			if(!db.openConnection()){
 				System.out.println("fail to connect database");
@@ -83,7 +84,7 @@ public class SeatDAO implements iSeatDAO{
 					seat.setStudio_id(rst.getInt("studio_id"));
 					seat.setSeat_row(rst.getInt("seat_row"));
 					seat.setSeat_column(rst.getInt("seat_column"));
-					System.out.println(seat.getSeat_id());
+					seat.setSeat_status(rst.getInt("seat_status"));
 					seatList.add(seat);
 				}
 			}
